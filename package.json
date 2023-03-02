@@ -10,9 +10,13 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@devexpress/dx-core": "^4.0.3",
     "@devexpress/dx-react-core": "^4.0.3",
     "@devexpress/dx-react-scheduler": "^4.0.3",
     "@devexpress/dx-react-scheduler-material-ui": "^4.0.3",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.11",
     "@tauri-apps/api": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

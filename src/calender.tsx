@@ -18,8 +18,8 @@ import {
 } from "@tauri-apps/api/fs";
 
 const schedulerData: AppointmentModel[] = [
-  { startDate: '2023-03-01T09:45', endDate: '2023-03-01T11:00', title: 'Meeting' },
-  { startDate: '2023-03-02T12:00', endDate: '2023-03-02T13:30', title: 'Go to a gym' },
+  { id:1, startDate: '2023-03-01T09:45', endDate: '2023-03-01T11:00', title: 'Meeting' },
+  { id:2, startDate: '2023-03-02T12:00', endDate: '2023-03-02T13:30', title: 'Go to a gym' },
 ];
 
 interface IProps {
@@ -56,16 +56,23 @@ export default class Calender extends React.PureComponent<IProps, IState> {
     this.setState((state) => {
       let { data } = state;
       if (args.added) {
-        /*
-        const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-        data = [...data, { id: startingAddedId, ...args.added }];
-        */
+        
+        var startingAddedId: number = 0;
+        if (data.length > 0)
+        {
+           const lastId = data[data.length - 1].id?.valueOf();
+           startingAddedId = Number(lastId) +1;
+        }
+
+        var newApp =  { id: startingAddedId, ...args.added } as AppointmentModel
+        data = [...data, newApp ];
+        
       }
       if (args.changed) {
         /*
-        data = data.map(appointment => (
+          data = data.map(appointment => (
           args.changed[appointment.id] ? { ...appointment, ...args.changed[appointment.id] } : appointment));
-          */
+        */
       }
       if (args.deleted !== undefined) {
         data = data.filter(appointment => appointment.id !== args.deleted);
