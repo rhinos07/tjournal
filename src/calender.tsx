@@ -69,10 +69,19 @@ export default class Calender extends React.PureComponent<IProps, IState> {
         
       }
       if (args.changed) { 
-        /*
-          data = data.map(appointment => (
-          args.changed[appointment.id] ? { ...appointment, ...args.changed[appointment.id] } : appointment));
-        */
+          var changed = args.changed;
+          data = data.map(appointment => {
+              if (appointment.id)
+              {
+                if (changed[appointment.id?.valueOf()])
+                {
+                  return { ...appointment, ...changed[appointment.id] }
+                }
+              }
+            
+              return appointment;
+            }
+          );
       }
       if (args.deleted !== undefined) {
         data = data.filter(appointment => appointment.id !== args.deleted);
