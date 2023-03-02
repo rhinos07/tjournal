@@ -19,7 +19,7 @@ import {
 
 const schedulerData: AppointmentModel[] = [
   { id:1, startDate: '2023-03-01T09:45', endDate: '2023-03-01T11:00', title: 'Meeting' },
-  { id:2, startDate: '2023-03-02T12:00', endDate: '2023-03-02T13:30', title: 'Go to a gym' },
+  { id:2, startDate: '2023-03-02T12:00', endDate: '2023-03-02T13:30', title: 'Go to a gym', notes: "Trainingsplan Tag 1" },
 ];
 
 interface IProps {
@@ -48,7 +48,7 @@ export default class Calender extends React.PureComponent<IProps, IState> {
     this.currentDateChange = (currentDate) => { this.setState({ currentDate }); };
     this.commitChanges = this.commitChanges.bind(this);
 
-    //readFile1();
+    this.readFile1();
 
   }
 
@@ -93,9 +93,27 @@ export default class Calender extends React.PureComponent<IProps, IState> {
 
   async readFile1() {
     try {
-      const result = await readTextFile("file.txt", {
-        dir: BaseDirectory.App,
+      const result = await readTextFile("file1.txt", {
+        dir: BaseDirectory.Desktop,
       });
+      this.setState((state) => {
+        let { data } = state;
+          
+        var startingAddedId: number = 0;
+        if (data.length > 0)
+        {
+            const lastId = data[data.length - 1].id?.valueOf();
+            startingAddedId = Number(lastId) +1;
+        }
+  
+        var newApp: AppointmentModel =  { id: startingAddedId, startDate: '2023-03-04T09:45', endDate: '2023-03-04T11:00', title: result };
+        data = [...data, newApp ];
+          
+      
+        return { data };
+      });
+
+
       console.log("result: " + result);
       return result;
     } catch (error) {
