@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
+import { ViewState, EditingState, IntegratedEditing, ChangeSet, AppointmentModel } from '@devexpress/dx-react-scheduler';
 import {
   Scheduler,
   MonthView,
@@ -17,7 +17,7 @@ import {
   readTextFile
 } from "@tauri-apps/api/fs";
 
-const schedulerData = [
+const schedulerData: AppointmentModel[] = [
   { startDate: '2023-03-01T09:45', endDate: '2023-03-01T11:00', title: 'Meeting' },
   { startDate: '2023-03-02T12:00', endDate: '2023-03-02T13:30', title: 'Go to a gym' },
 ];
@@ -26,7 +26,7 @@ interface IProps {
 }
 
 interface IState {
-  data: any;
+  data: AppointmentModel[];
   currentDate: Date;
 }
 
@@ -52,19 +52,19 @@ export default class Calender extends React.PureComponent<IProps, IState> {
 
   }
 
-  commitChanges({ added, changed, deleted }) {
+  commitChanges( args:ChangeSet) {
     this.setState((state) => {
       let { data } = state;
-      if (added) {
+      if (args.added) {
         const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-        data = [...data, { id: startingAddedId, ...added }];
+        data = [...data, { id: startingAddedId, ...args.added }];
       }
-      if (changed) {
+      if (args.changed) {
         data = data.map(appointment => (
-          changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+          args.changed[appointment.id] ? { ...appointment, ...args.changed[appointment.id] } : appointment));
       }
-      if (deleted !== undefined) {
-        data = data.filter(appointment => appointment.id !== deleted);
+      if (args.deleted !== undefined) {
+        data = data.filter(appointment => appointment.id !== args.deleted);
       }
       return { data };
     });
